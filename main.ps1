@@ -3,7 +3,6 @@
 
 #Requires -RunAsAdministrator
 
-# Colored output function
 function Write-ColorOutput($ForegroundColor) {
     $fc = $host.UI.RawUI.ForegroundColor
     $host.UI.RawUI.ForegroundColor = $ForegroundColor
@@ -13,7 +12,6 @@ function Write-ColorOutput($ForegroundColor) {
     $host.UI.RawUI.ForegroundColor = $fc
 }
 
-# Function to install Python
 function Install-Python {
     param(
         [string]$Version,
@@ -22,16 +20,13 @@ function Install-Python {
     
     Write-ColorOutput Yellow "Installing Python $Version ($Architecture)..."
     
-    # Download URL
     $url = "https://www.python.org/ftp/python/$Version/python-$Version-$Architecture.exe"
     $installerPath = "$env:TEMP\python-$Version-installer.exe"
     
     try {
-        # Download installer
         Write-Host "Downloading from $url..."
         Invoke-WebRequest -Uri $url -OutFile $installerPath -ErrorAction Stop
         
-        # Installation parameters
         $installArgs = @(
             "/quiet",
             "InstallAllUsers=1",
@@ -44,11 +39,9 @@ function Install-Python {
             "InstallLauncherAllUsers=1"
         )
         
-        # Run installer
         Write-Host "Installing Python $Version..."
         Start-Process -FilePath $installerPath -ArgumentList $installArgs -Wait -NoNewWindow
         
-        # Clean up
         Remove-Item $installerPath -Force
         
         Write-ColorOutput Green "[OK] Python $Version installed successfully!"
@@ -59,7 +52,6 @@ function Install-Python {
     }
 }
 
-# Main menu
 Write-ColorOutput Cyan @"
 ================================================
     Python Installer for Windows
@@ -111,12 +103,10 @@ switch ($choice) {
     }
 }
 
-# Check installed versions
 Write-Host "`n"
 Write-ColorOutput Cyan "Checking installed Python versions:"
 Write-Host "==========================================="
 
-# Search for all installed Python versions
 $pythonPaths = @(
     "C:\Program Files\Python*",
     "C:\Program Files (x86)\Python*",
